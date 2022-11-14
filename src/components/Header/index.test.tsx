@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/react'
-import App from './App'
-import { renderWithQueryProvider } from './utils/testUtils'
+import { renderWithQueryProvider } from '../../utils/testUtils'
+import Header from './index'
 
 test('has title', () => {
-	renderWithQueryProvider(<App />)
+	renderWithQueryProvider(<Header />)
 	const title = screen.getByText('Art Rater')
 	expect(title).toBeInTheDocument()
 })

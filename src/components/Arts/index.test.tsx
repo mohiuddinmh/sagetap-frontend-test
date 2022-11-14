@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react'
-import App from './App'
-import { renderWithQueryProvider } from './utils/testUtils'
+import App from '../../App'
+import { renderWithQueryProvider } from '../../utils/testUtils'
 
 test('has title', () => {
 	renderWithQueryProvider(<App />)
