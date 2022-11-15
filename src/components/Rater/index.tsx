@@ -1,7 +1,8 @@
-import React, { Dispatch, SetStateAction, SyntheticEvent } from 'react'
+import React, { Dispatch, SetStateAction, SyntheticEvent, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { api } from '../../api'
 import { Button, Rating } from '@mui/material'
+import { setToast, TOAST_TYPE } from '../../utils/toastUtils'
 
 interface RaterProps {
   setRating: Dispatch<SetStateAction<number | null>>
@@ -13,16 +14,33 @@ interface RaterProps {
 
 export default function Rater({ id, rating, voted, setRating, setVoted }: RaterProps) {
 
-	const { mutate: mutateRating } = useMutation(api.rating.post)
+	const { mutate: mutateRating, isSuccess, isError } = useMutation(api.rating.post, {
+		onSuccess: () => {
+			setVoted(true)
+		},
+		onError: () => {
+			setVoted(false)
+		}
+	})
+
+	useEffect(() => {
+		if (isSuccess) {
+			setToast({ content: `Rating submitted for ${id}`, type: TOAST_TYPE.SUCCESS })
+		}
+	}, [isSuccess])
+
+	useEffect(() => {
+		if (isError) {
+			setToast({ content: `Error upon submitting rating for ${id}`, type: TOAST_TYPE.ERROR })
+		}
+	}, [isError])
 
 	const handleRatingChange = (event: SyntheticEvent, value: number | null) => {
 		setRating(value)
 	}
 
 	const handleSubmit = () => {
-		console.log('Submitting!')
 		mutateRating({ id, rating: rating as number })
-		setVoted(true)
 	}
 
 	return <div style={{ display: 'flex', justifyItems: 'center', justifyContent: 'center' }}>
