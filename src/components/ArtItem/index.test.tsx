@@ -80,18 +80,13 @@ test('for an art item, clicking numbered button updates rating display below ima
 
 	// when
 	fireEvent.click(ratingTwoButton)
-
 	// then
 	expect(screen.getByTestId('rating')).toHaveTextContent('Rating: 2')
 })
 
-test('for an art item, clicking submit POSTs update, displays a toast success message, hides buttons', async () => {
+test('Successful submission of rating displays a toast success message, hides buttons', async () => {
 	// given
-	server.use(rest.post('https://20e2q.mocklab.io/rating', (req, res, ctx) => {
-		return res(
-			ctx.status(200),
-		)
-	}))
+	server.use(rest.post('https://20e2q.mocklab.io/rating', (req, res, ctx) => res(ctx.status(200), ctx.json({}))))
 	renderWithQueryProvider(
 		<>
 			<ArtItem id={1} />
@@ -102,7 +97,6 @@ test('for an art item, clicking submit POSTs update, displays a toast success me
 	const ratingScale = screen.getByTestId('rating-stars')
 	const ratingOneButton = ratingScale.querySelector('[value=\'1\']') as Element
 	const submitButton = screen.getByText(/Submit/)
-	screen.debug()
 
 	// when
 	fireEvent.click(ratingOneButton)
@@ -110,5 +104,31 @@ test('for an art item, clicking submit POSTs update, displays a toast success me
 
 	// then
 	await waitFor(() => expect(screen.getByText(/Rating submitted for/)).toBeInTheDocument())
+
+	expect(screen.queryByText(/Submit/)).not.toBeInTheDocument()
+})
+
+test('Failed submission of rating displays a toast error message, does not hide buttons', async () => {
+	// given
+	server.use(rest.post('https://20e2q.mocklab.io/rating', (req, res, ctx) => res(ctx.status(404))))
+	renderWithQueryProvider(
+		<>
+			<ArtItem id={1} />
+			<ToastContainer />
+		</>
+	)
+	await waitFor(() => expect(screen.getByText('Plate One from Collection of Various Vases')).toBeInTheDocument())
+	const ratingScale = screen.getByTestId('rating-stars')
+	const ratingOneButton = ratingScale.querySelector('[value=\'1\']') as Element
+	const submitButton = screen.getByText(/Submit/)
+
+	// when
+	fireEvent.click(ratingOneButton)
+	fireEvent.click(submitButton)
+
+	// then
+	await waitFor(() => expect(screen.getByText(/Error upon submitting rating for/)).toBeInTheDocument())
+
+	expect(screen.queryByText(/Submit/)).toBeInTheDocument()
 })
 

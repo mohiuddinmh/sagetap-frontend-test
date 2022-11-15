@@ -14,6 +14,12 @@ export const api = {
 		post: async (request: RatingRequest) => fetch('https://20e2q.mocklab.io/rating', {
 			method: 'POST',
 			body: JSON.stringify(request)
+		}).then(res => {
+			if (res.ok) {
+				return res.json()
+			} else {
+				throw new Error(`${res.status} ${res.statusText}`)
+			}
 		})
 	}
 }
