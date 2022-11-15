@@ -1,18 +1,18 @@
-import { Theme, toast, TypeOptions } from 'react-toastify'
-import React from 'react'
+import { Theme, toast, ToastPosition, TypeOptions } from 'react-toastify'
+import { MutableRefObject } from 'react'
 
 interface SetToastType {
   autoClose?: number
-  content?: any
+  content?: string
   onClose?: () => void
-  position?: any
-  ref?: any
-  theme?: any
-  type?: any
+  position?: ToastPosition
+  ref?: MutableRefObject<number | string | undefined>
+  theme?: Theme
+  type?: TypeOptions
   isLoading?: boolean
 }
 
-const AUTO_CLOSE_MS = 5000
+const AUTO_CLOSE_MS = 4000
 
 export const setToast = ({
 	autoClose = AUTO_CLOSE_MS,
@@ -21,7 +21,7 @@ export const setToast = ({
 	onClose = (() => {
 	}),
 	position = TOAST_POSITION.TOP_CENTER,
-	ref = {},
+	ref = { current: undefined },
 	theme = TOAST_THEME.DEFAULT,
 	type = TOAST_TYPE.DEFAULT,
 	isLoading = false
@@ -33,51 +33,14 @@ export const setToast = ({
 		})
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export const updateToastOnError = (toastId, { render, theme = TOAST_THEME.DEFAULT as Theme }) => {
-	toast.update(toastId, {
-		render,
-		type: TOAST_TYPE.ERROR as TypeOptions,
-		theme,
-		isLoading: false,
-		autoClose: AUTO_CLOSE_MS,
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		onClose: () => {
-		},
-		closeButton: true,
-	})
-}
-
-export const updateToastOnSuccess = (toastId: any, { render }: any) => {
-	toast.update(toastId, {
-		render,
-		type: TOAST_TYPE.SUCCESS as TypeOptions,
-		theme: TOAST_THEME.DEFAULT as Theme,
-		isLoading: false,
-		autoClose: AUTO_CLOSE_MS,
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		onClose: () => {
-		},
-		closeButton: true,
-	})
-}
-
-export const ErrorToast = ({ heading, reason }: { heading: string, reason: string }) => (
-	<>
-		<div>{heading}</div>
-		{reason && <div>{reason}</div>}
-	</>
-)
-
-export const TOAST_THEME = {
+export const TOAST_THEME: Record<string, Theme> = {
 	LIGHT: 'light',
 	DARK: 'dark',
 	COLORED: 'colored',
 	DEFAULT: 'light'
 }
 
-export const TOAST_TYPE = {
+export const TOAST_TYPE: Record<string, TypeOptions> = {
 	DEFAULT: 'default',
 	ERROR: 'error',
 	INFO: 'info',
@@ -85,7 +48,7 @@ export const TOAST_TYPE = {
 	WARNING: 'warning'
 }
 
-export const TOAST_POSITION = {
+export const TOAST_POSITION: Record<string, ToastPosition> = {
 	TOP_RIGHT: 'top-right',
 	TOP_CENTER: 'top-center',
 	TOP_LEFT: 'top-left',

@@ -18,7 +18,7 @@ const initialState = {
 const state = proxy<ArtState>(initialState)
 
 const actions = {
-	hasArt: (id: number | undefined) => id && state.arts.some(a => a.id === id),
+	hasArt: (id: number) => state.arts.some(a => a.id === id),
 	addArt: (id: number) => {
 		state.arts.unshift({ id, disabled: false })
 	},

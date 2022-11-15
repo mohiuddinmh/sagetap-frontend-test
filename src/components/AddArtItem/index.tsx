@@ -1,5 +1,5 @@
 import { useArtStore } from '../../stores/artStore'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import styles from './index.module.css'
 import { setToast } from '../../utils/toastUtils'
@@ -7,13 +7,17 @@ import { setToast } from '../../utils/toastUtils'
 export default function AddArtItem() {
 	const [artId, setArtId] = useState<number | undefined>()
 	const { actions } = useArtStore()
+	const inputRef = useRef<any>('')
 
 	const handleAddClick = () => {
+		if (!artId) return
 		if (actions.hasArt(artId)) {
 			setToast({ content: 'The following art is already on display' })
 			return
 		}
-		artId !== undefined && actions.addArt(artId)
+		actions.addArt(artId)
+		setArtId(undefined)
+		inputRef.current.value = ''
 	}
 
 	const handleArtIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,8 +25,13 @@ export default function AddArtItem() {
 	}
 
 	return <div className={styles.addArtItem}>
-		<TextField type="number" label="Please enter Art ID" variant='standard' onChange={handleArtIdChange} />
+		<TextField
+			type="number"
+			label="Please enter Art ID"
+			variant='standard'
+			inputRef={inputRef}
+			onChange={handleArtIdChange} />
 
-		<Button onClick={handleAddClick} variant='text'>Add</Button>
+		<Button onClick={handleAddClick} disabled={!artId} variant='text'>Add</Button>
 	</div>
 }
