@@ -7,18 +7,18 @@ import { Artwork } from '../../types'
 import RemoveArtItem from '../RemoveArtItem'
 import { Card, CardContent, CardMedia, Typography } from '@mui/material'
 import { setToast, TOAST_TYPE } from '../../utils/toastUtils'
-import { useArtStore } from '../../stores/artStore'
+import { useArtContext } from '../../contexts/arts'
 
 interface ArtProps {
   id: number
 }
 
-function ArtItem({ id }: ArtProps) {
+export default function ArtItem({ id }: ArtProps) {
 
 	const [voted, setVoted] = useState<boolean>(false)
 	const [rating, setRating] = useState<number | null>(null)
 
-	const { actions } = useArtStore()
+	const { removeArt } = useArtContext()
 	const {
 		data: artwork,
 		isLoading,
@@ -29,7 +29,7 @@ function ArtItem({ id }: ArtProps) {
 	useEffect(() => {
 		if (isError) {
 			setToast({ content: `Unable to find an art for id ${id}`, type: TOAST_TYPE.ERROR })
-			actions.removeArt(id)
+			removeArt(id)
 		}
 	}, [isError])
 
@@ -65,5 +65,3 @@ function ArtItem({ id }: ArtProps) {
 		</Card>
 	)
 }
-
-export default React.memo(ArtItem)

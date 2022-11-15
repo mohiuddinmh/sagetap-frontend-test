@@ -1,10 +1,10 @@
 import React from 'react'
 import ArtItem from '../ArtItem'
-import { useArtStore } from '../../stores/artStore'
 import styles from './index.module.css'
+import { useArtContext } from '../../contexts/arts'
 
 export default function Arts() {
-	const { snap: { arts } } = useArtStore()
+	const { arts } = useArtContext()
 
 	return <section className={styles.artsContainer}>
 		{arts.map(({ id, disabled }) => {
@@ -14,4 +14,3 @@ export default function Arts() {
 		})}
 	</section>
 }
-

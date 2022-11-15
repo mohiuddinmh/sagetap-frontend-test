@@ -1,21 +1,22 @@
-import { useArtStore } from '../../stores/artStore'
 import React, { useRef, useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import styles from './index.module.css'
 import { setToast } from '../../utils/toastUtils'
+import { useArtContext } from '../../contexts/arts'
 
 export default function AddArtItem() {
 	const [artId, setArtId] = useState<number | undefined>()
-	const { actions } = useArtStore()
-	const inputRef = useRef<any>('')
+	const { hasArt, addArt } = useArtContext()
+	// eslint-disable-next-line 
+  const inputRef = useRef<any>('')
 
 	const handleAddClick = () => {
 		if (!artId) return
-		if (actions.hasArt(artId)) {
+		if (hasArt(artId)) {
 			setToast({ content: 'The following art is already on display' })
 			return
 		}
-		actions.addArt(artId)
+		addArt(artId)
 		setArtId(undefined)
 		inputRef.current.value = ''
 	}
