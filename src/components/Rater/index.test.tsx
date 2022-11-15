@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/react'
-import App from '../../App'
 import { renderWithQueryProvider } from '../../utils/testUtils'
+import Rater from './index'
 
 test('has title', () => {
-	renderWithQueryProvider(<App />)
-	const title = screen.getByText('Art Rater')
-	expect(title).toBeInTheDocument()
+	renderWithQueryProvider(<Rater id={1} rating={null} voted={false} setRating={() => null} setVoted={() => null} />)
+	expect(screen.getByTestId('rating-stars')).toBeInTheDocument()
+	expect(screen.getByTestId('submit-rating')).toBeInTheDocument()
 })

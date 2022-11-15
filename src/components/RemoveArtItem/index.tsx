@@ -7,7 +7,6 @@ interface RemoveArtItemProps {
   id: number
 }
 
-
 export default function RemoveArtItem({ id }: RemoveArtItemProps) {
 
 	const [, setArts] = useArtsAtom()
