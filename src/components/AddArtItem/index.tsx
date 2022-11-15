@@ -1,19 +1,24 @@
-import { useArtStore } from '../../stores/artStore'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import styles from './index.module.css'
 import { setToast } from '../../utils/toastUtils'
+import { artAdder, useArtsAtom } from '../../atoms/art'
 
 export default function AddArtItem() {
 	const [artId, setArtId] = useState<number | undefined>()
-	const { actions } = useArtStore()
+	const [arts, setArts] = useArtsAtom()
+	const inputRef = useRef<any>(null)
 
 	const handleAddClick = () => {
-		if (actions.hasArt(artId)) {
+		if (arts.some(a => a.id === artId)) {
 			setToast({ content: 'The following art is already on display' })
 			return
 		}
-		artId !== undefined && actions.addArt(artId)
+		artId !== undefined && setArts(artAdder(artId))
+		setArtId(undefined)
+		if (inputRef.current) {
+			inputRef.current.value = ''
+		}
 	}
 
 	const handleArtIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,8 +26,9 @@ export default function AddArtItem() {
 	}
 
 	return <div className={styles.addArtItem}>
-		<TextField type="number" label="Please enter Art ID" variant='standard' onChange={handleArtIdChange} />
+		<TextField type="number" label="Please enter Art ID" variant='standard' inputRef={inputRef}
+			onChange={handleArtIdChange} />
 
-		<Button onClick={handleAddClick} variant='text'>Add</Button>
+		<Button onClick={handleAddClick} disabled={!artId} variant='text'>Add</Button>
 	</div>
 }

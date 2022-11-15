@@ -1,6 +1,6 @@
 export interface Art {
   id: number
-  disabled: boolean
+  disabled?: boolean
 }
 
 export interface Artwork {

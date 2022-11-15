@@ -7,7 +7,7 @@ import { Artwork } from '../../types'
 import RemoveArtItem from '../RemoveArtItem'
 import { Card, CardContent, CardMedia, Typography } from '@mui/material'
 import { setToast, TOAST_TYPE } from '../../utils/toastUtils'
-import { useArtStore } from '../../stores/artStore'
+import { artRemover, useArtsAtom } from '../../atoms/art'
 
 interface ArtProps {
   id: number
@@ -17,8 +17,8 @@ function ArtItem({ id }: ArtProps) {
 
 	const [voted, setVoted] = useState<boolean>(false)
 	const [rating, setRating] = useState<number | null>(null)
+	const [, setArts] = useArtsAtom()
 
-	const { actions } = useArtStore()
 	const {
 		data: artwork,
 		isLoading,
@@ -29,7 +29,7 @@ function ArtItem({ id }: ArtProps) {
 	useEffect(() => {
 		if (isError) {
 			setToast({ content: `Unable to find an art for id ${id}`, type: TOAST_TYPE.ERROR })
-			actions.removeArt(id)
+			setArts(artRemover(id))
 		}
 	}, [isError])
 

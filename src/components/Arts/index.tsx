@@ -1,10 +1,10 @@
 import React from 'react'
 import ArtItem from '../ArtItem'
-import { useArtStore } from '../../stores/artStore'
 import styles from './index.module.css'
+import { useArtsAtom } from '../../atoms/art'
 
 export default function Arts() {
-	const { snap: { arts } } = useArtStore()
+	const [arts] = useArtsAtom()
 
 	return <section className={styles.artsContainer}>
 		{arts.map(({ id, disabled }) => {
