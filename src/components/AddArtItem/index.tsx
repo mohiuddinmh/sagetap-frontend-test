@@ -7,18 +7,18 @@ import { artAdder, useArtsAtom } from '../../atoms/art'
 export default function AddArtItem() {
 	const [artId, setArtId] = useState<number | undefined>()
 	const [arts, setArts] = useArtsAtom()
-	const inputRef = useRef<any>(null)
+	// eslint-disable-next-line
+  const inputRef = useRef<any>('')
 
 	const handleAddClick = () => {
+		if (!artId) return
 		if (arts.some(a => a.id === artId)) {
 			setToast({ content: 'The following art is already on display' })
 			return
 		}
-		artId !== undefined && setArts(artAdder(artId))
+		setArts(artAdder(artId))
 		setArtId(undefined)
-		if (inputRef.current) {
-			inputRef.current.value = ''
-		}
+		inputRef.current.value = ''
 	}
 
 	const handleArtIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {

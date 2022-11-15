@@ -13,7 +13,7 @@ interface ArtProps {
   id: number
 }
 
-function ArtItem({ id }: ArtProps) {
+export default function ArtItem({ id }: ArtProps) {
 
 	const [voted, setVoted] = useState<boolean>(false)
 	const [rating, setRating] = useState<number | null>(null)
@@ -65,5 +65,3 @@ function ArtItem({ id }: ArtProps) {
 		</Card>
 	)
 }
-
-export default React.memo(ArtItem)
