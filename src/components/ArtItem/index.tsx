@@ -5,7 +5,7 @@ import Rater from '../Rater'
 import { useQuery } from 'react-query'
 import { Artwork } from '../../types'
 import RemoveArtItem from '../RemoveArtItem'
-import { Card, CardContent, CardMedia, Typography } from '@mui/material'
+import { Card, CardContent, CardMedia, CircularProgress, Typography } from '@mui/material'
 import { setToast, TOAST_TYPE } from '../../utils/toastUtils'
 import { useArtStore } from '../../stores/artStore'
 
@@ -34,11 +34,7 @@ function ArtItem({ id }: ArtProps) {
 	}, [isError])
 
 	if (isLoading) {
-		return <>Loading...</>
-	}
-
-	if (isError) {
-		return <></>
+		return <CircularProgress style={{ marginTop: '150px' }} />
 	}
 
 	return (
